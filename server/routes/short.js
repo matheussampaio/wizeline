@@ -22,8 +22,6 @@ class Short {
         return client.llenAsync('allshortsurls')
             .then(length => client.lrangeAsync('allshortsurls', 0, length))
             .then((allShortsUrl) => {
-                console.log(allShortsUrl);
-
                 const promises = allShortsUrl.map(shortUrl => client.hgetallAsync(shortUrl));
 
                 return Promise.all(promises);
@@ -60,11 +58,8 @@ class Short {
             .then((exists) => {
                 // if not, just continue
                 if (exists) {
-                    console.log('this md5 already exists, continuing...', url, hash);
                     return Promise.resolve();
                 }
-
-                console.log('this is a new md5, adding this long url', url, hash);
 
                 // add this key to our index so we can fetch all md5 later
                 client.rpushAsync('allmd5', md5Key);
@@ -109,12 +104,9 @@ class Short {
             .then((exists) => {
                 // if exists, try again
                 if (exists) {
-                    console.log('this url already exists, trying again', shortUrl);
-
                     return this.getUniqueShortUrl();
                 }
 
-                console.log('found a unique url', shortUrl);
                 // otherwise, return this unique url
                 return shortUrl;
             })
