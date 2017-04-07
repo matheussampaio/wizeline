@@ -34,22 +34,7 @@ gulp.task('nodemon', (done) => {
             'dist'
         ],
         delay: 5,
-        ext: 'js json',
-    	stdout: false
-    })
-    .on('readable', function () {
-        // Pass output through bunyan formatter
-        var bunyan = childProcess.fork(
-            path.join('.', 'node_modules', 'bunyan', 'bin', 'bunyan'),
-            ['--color', '--output', 'short'],
-            { silent: true }
-        );
-
-        bunyan.stdout.pipe(process.stdout);
-        bunyan.stderr.pipe(process.stderr);
-
-        this.stdout.pipe(bunyan.stdin);
-        this.stderr.pipe(bunyan.stdin);
+        ext: 'js json'
     });
 
     done();
