@@ -1,47 +1,52 @@
 import crypto from 'crypto';
 
+import client from '../database';
+
 class Short {
-    constructor() {
-        this.urls = {};
+    getAll() {
+        return client.llenAsync('hashs')
+            .then(length => client.lrangeAsync('hashs', 0, length))
+            .then((hashs) => {
+                const promises = hashs.map(hash => client.hgetallAsync(hash));
+
+                return Promise.all(promises);
+            });
     }
 
     get({ hash }) {
-        console.log('Short::get', { hash });
-        return this.urls[hash];
+        return client.hgetallAsync(`short:${hash}`);
     }
 
-    add({ hash, url }) {
-        console.log('Short::add', { url, hash });
-
+    add({ url }) {
         if (url == null) {
             throw new Error('MISSING_URL_PARAM');
         }
 
-        if (hash == null) {
-            hash = this.getHash({ url });
-        }
+        const hash = this.getHash({ url });
+        const key = `short:${hash}`;
+        let isNew = false;
 
-        if (this.urls[hash] == null) {
-            this.urls[hash] = {
-                hash,
-                long_url: url,
-                clicks: 0,
-                created_on: new Date().getTime()
-            };
-        }
+        return client.existsAsync(key)
+            .then((exists) => {
+                if (exists) {
+                    return Promise.resolve();
+                }
 
-        return this.urls[hash];
-    }
+                isNew = true;
 
-    has({ hash }) {
-        console.log('Short::has', { hash });
+                client.rpushAsync('hashs', `short:${hash}`);
 
-        return this.urls[hash] != null;
+                return client.hmsetAsync(`short:${hash}`, 'hash', hash, 'long_url', url, 'clicks', 0, 'create_on', new Date().getTime());
+            })
+            .then(() => this.get({ hash }))
+            .then((data) => {
+                data.new = isNew;
+
+                return data;
+            });
     }
 
     getHash({ url }) {
-        console.log('Short::getHash', { url });
-
         if (url == null) {
             throw new Error('MISSING_URL_PARAM');
         }
@@ -50,15 +55,13 @@ class Short {
     }
 
     inc({ hash }) {
-        console.log('Short::inc', { hash });
+        const key = `short:${hash}`;
+        const field = 'clicks';
 
-        if (hash != null && this.urls[hash] != null) {
-            this.urls[hash].clicks += 1;
-        }
+        return client.hincrbyAsync(key, field, 1);
     }
 }
 
 const singleton = new Short();
-
 
 export default singleton;
