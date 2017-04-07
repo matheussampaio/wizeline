@@ -35,10 +35,10 @@ app.get('/api/short', (req, res) => {
         .catch(error => res.status(500).send({ error }));
 });
 
-app.get('/:hash', (req, res) => {
-    return Short.get({ hash: req.params.hash })
+app.get('/:shorturl', (req, res) => {
+    return Short.get({ shortUrl: req.params.shorturl })
         .then(data => {
-            Short.inc({ hash: req.params.hash });
+            Short.inc({ shortUrl: req.params.shorturl });
 
             return res.redirect(301, data.long_url);
         })
@@ -46,7 +46,7 @@ app.get('/:hash', (req, res) => {
             error,
             status: 404,
             message: 'Page not found',
-            hash: req.params.hash
+            hash: req.params.shorturl
         }));
 });
 
