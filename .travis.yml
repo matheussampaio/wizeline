@@ -4,3 +4,4 @@ node_js:
 cache: yarn
 script:
   - npm run build
+  - npm run lint
