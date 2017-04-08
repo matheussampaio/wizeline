@@ -30,6 +30,7 @@ gulp.task('build:clean', () => {
 
 gulp.task('build:js:web', [], () => (
     gulp.src('**/*.html', { cwd: 'app/components/' })
+        .pipe(plugins.if(argv.cibuild, plugins.util.noop(), plugins.plumber()))
         .pipe(plugins.angularTemplatecache('templates.js', {
             module: config.appName,
             base: file => file.relative.split(path.sep).slice(-3).join(path.sep)
