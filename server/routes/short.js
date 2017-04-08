@@ -51,8 +51,6 @@ class Short {
         const hash = this.getHash(url);
         const md5Key = `md5:${hash}`;
 
-        let isNew = false;
-
         // check if this long url already exists in our database
         return client.existsAsync(md5Key)
             .then((exists) => {
@@ -63,9 +61,6 @@ class Short {
 
                 // add this key to our index so we can fetch all md5 later
                 client.rpushAsync('allmd5', md5Key);
-
-                // otherwise, add to the database
-                isNew = true;
 
                 return client.setAsync(md5Key, url);
             })
@@ -85,7 +80,7 @@ class Short {
                     'clicks', 0,
                     'create_on', new Date().getTime()
                 )
-                .then(() => this.get({ shortUrl }))
+                .then(() => this.get({ shortUrl }));
             });
     }
 
@@ -98,7 +93,7 @@ class Short {
             shortUrl += this.alphabet[index];
         }
 
-        const shortUrlKey = `shorturl:${shortUrl}`
+        const shortUrlKey = `shorturl:${shortUrl}`;
 
         return client.existsAsync(shortUrlKey)
             .then((exists) => {
@@ -109,7 +104,7 @@ class Short {
 
                 // otherwise, return this unique url
                 return shortUrl;
-            })
+            });
     }
 
     getHash(url) {
