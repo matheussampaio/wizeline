@@ -14,7 +14,7 @@ Wizeshort
 $ yarn install
 ```
 
-## Hot to start:
+## How to start:
 
 ```
 $ npm start
