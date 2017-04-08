@@ -8,6 +8,7 @@ const client = redis.createClient(redisUrl);
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
 
+// if we want to quickly erase the database
 // client.flushall();
 
 export default client;

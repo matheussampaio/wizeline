@@ -43,7 +43,7 @@ class Short {
         });
     }
 
-    add({ url }) {
+    add({ url, customUrl }) {
         if (url == null) {
             throw new Error('MISSING_URL_PARAM');
         }
@@ -64,8 +64,14 @@ class Short {
 
                 return client.setAsync(md5Key, url);
             })
-            // generate an unique short url
-            .then(() => this.getUniqueShortUrl())
+            // generate an unique short url or use a custom one
+            .then(() => {
+                if (customUrl != null) {
+                    return customUrl;
+                }
+
+                return this.getUniqueShortUrl();
+            })
             // add the new short url to the database
             .then((shortUrl) => {
                 const shortUrlKey = `shorturl:${shortUrl}`;
@@ -87,24 +93,30 @@ class Short {
     getUniqueShortUrl() {
         let shortUrl = '';
 
+        // generate a random short url
         for (let i = 0; i < this.urlLength; i++) {
             const index = parseInt(Math.random() * this.alphabet.length, 10);
 
             shortUrl += this.alphabet[index];
         }
 
+        // verify if that short url is unique, if not try again
+        return this.verifyShortUrl(shortUrl).catch(() => this.getUniqueShortUrl());
+    }
+
+    verifyShortUrl(shortUrl) {
         const shortUrlKey = `shorturl:${shortUrl}`;
 
-        return client.existsAsync(shortUrlKey)
-            .then((exists) => {
-                // if exists, try again
-                if (exists) {
-                    return this.getUniqueShortUrl();
-                }
+        // check if that short url key already exists
+        return client.existsAsync(shortUrlKey).then((exists) => {
+            // if exists, reject
+            if (exists) {
+                return Promise.reject({ status: 400, code: 'CUSTOM_URL_TAKEN' });
+            }
 
-                // otherwise, return this unique url
-                return shortUrl;
-            });
+            // otherwise, resolve
+            return Promise.resolve(shortUrl);
+        });
     }
 
     getHash(url) {

@@ -35,6 +35,13 @@ app.get('/api/short', (req, res) => {
         .catch(error => res.status(500).send({ error }));
 });
 
+app.post('/api/custom', (req, res) => {
+    return Short.verifyShortUrl(req.body.custom)
+        .then(customUrl => Short.add({ url: req.body.url, customUrl }))
+        .then(short => res.status(200).send({ short }))
+        .catch(error => res.status(error.status).send({ error }));
+});
+
 app.get('/:shorturl', (req, res) => {
     return Short.get({ shortUrl: req.params.shorturl })
         .then((data) => {
@@ -51,5 +58,5 @@ app.get('/:shorturl', (req, res) => {
 });
 
 app.listen(app.get('port'), () => {
-    console.log(`Wizeshort listening on port ${app.get('port')}!`);
+    console.log(`Wizeshort listening on port ${app.get('port')}!`); // eslint-disable-line
 });
