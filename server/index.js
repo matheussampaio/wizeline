@@ -37,7 +37,7 @@ app.get('/api/short', (req, res) => {
 
 app.get('/:shorturl', (req, res) => {
     return Short.get({ shortUrl: req.params.shorturl })
-        .then(data => {
+        .then((data) => {
             Short.inc({ shortUrl: req.params.shorturl });
 
             return res.redirect(301, data.long_url);
@@ -52,4 +52,4 @@ app.get('/:shorturl', (req, res) => {
 
 app.listen(app.get('port'), () => {
     console.log(`Wizeshort listening on port ${app.get('port')}!`);
-})
+});
