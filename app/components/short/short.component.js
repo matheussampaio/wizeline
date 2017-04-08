@@ -28,8 +28,8 @@ class ShortController {
     copyUrl() {
         this.$log.log('ShortController::copyUrl', this.short.fullUrl);
 
-        document.querySelector('#url').select();
-        document.execCommand('copy');
+        document.querySelector('#url').select(); // eslint-disable-line
+        document.execCommand('copy'); // eslint-disable-line
     }
 }
 
