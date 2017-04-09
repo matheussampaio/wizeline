@@ -1,10 +1,32 @@
-<form novalidate>
-    <div class="form-group">
-        <input id="url" class="form-control" type="text" placeholder="Paste a link" ng-model="$ctrl.url">
-    </div>
+<div layout flex layout-align="center" class="form-container">
+    <form novalidate name="shortenForm" flex-xs="95" flex-gt-xs="75" flex-gt-sm="65" flex-gt-md="55" flex-gt-lg="35">
 
-    <div class="form-group">
-        <input class="btn btn-primary" ng-if="$ctrl.url && $ctrl.url === $ctrl.data.fullUrl" type="button" ng-click="$ctrl.copyUrl()" value="Copy">
-        <input class="btn btn-primary" ng-if="$ctrl.data == null || $ctrl.url !== $ctrl.data.fullUrl" type="submit" ng-click="$ctrl.shortenUrl()" value="Shorten">
-    </div>
-</form>
+        <div layout="row" flex>
+            <md-input-container flex md-no-float>
+                <input id="url" name="url" class="form-control" type="text" placeholder="Paste a link" ng-model="$ctrl.url" required maxlength="2000">
+                <div ng-messages="shortenForm.url.$error" ng-show="shortenForm.url.$dirty || shortenForm.url.$touched">
+                    <div ng-message="required">This is required!</div>
+                    <div ng-message="md-maxlength">That's too long!</div>
+                    <div ng-message="minlength">That's too short!</div>
+                </div>
+            </md-input-container>
+
+            <div class="main-btns-container">
+                <md-button type="submit" class="md-raised md-warn"
+                    ng-if="$ctrl.data == null || $ctrl.url !== $ctrl.data.fullUrl"
+                    ng-disabled="shortenForm.$invalid"
+                    ng-click="$ctrl.shortenUrl()">
+                    Shorten
+                </md-button>
+
+                <md-button type="submit" class="md-raised md-primary"
+                    ng-if="$ctrl.url && $ctrl.url === $ctrl.data.fullUrl"
+                    ng-click="$ctrl.copyUrl()">
+                    Shorten
+                </md-button>
+            </div>
+        </div>
+
+        <!-- <pre>{{ shortenForm | json }}</pre> -->
+    </form>
+</div>

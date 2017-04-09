@@ -8,7 +8,7 @@ class ShortenController {
         this.ShortenService = ShortenService;
 
         this.shortLink = null;
-        this.url = 'http://www.google.com';
+        this.url = '';
     }
 
     shortenUrl() {
