@@ -1,5 +1,6 @@
 import crypto from 'crypto';
 import request from 'request';
+import validUrl from 'valid-url';
 
 import client from '../database';
 
@@ -116,7 +117,12 @@ class Shorten {
 
     validadeUrl(url) {
         return new Promise((resolve, reject) => {
-            request.get(url, (error) => {
+            if (!validUrl.isWebUri(url)) {
+                return reject({ status: 406, code: 'INVALID_URL' });
+            }
+
+            return request.head(url, (error) => {
+
                 if (error) {
                     return reject({ status: 406, code: 'INVALID_URL' });
                 }
