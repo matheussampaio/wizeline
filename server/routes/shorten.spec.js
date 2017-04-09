@@ -93,7 +93,7 @@ describe('POST: /api/custom', () => {
             });
     });
 
-    it('should return an error if it\s a duplicate', (done) => {
+    it('should return an error if it\'s a duplicate', (done) => {
         data.custom = new Date().getTime().toString();
 
         chai.request(server)

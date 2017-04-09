@@ -32,9 +32,7 @@ server.get('/api/shorten', (req, res) => {
 server.post('/api/shorten', (req, res) => {
     Shorten.add({ url: req.body.url })
         .then(shorten => res.status(200).send({ shorten }))
-        .catch(error => {
-            return res.status(error.status).send({ error })
-        });
+        .catch(error => res.status(error.status).send({ error }));
 });
 
 server.post('/api/custom', (req, res) => {

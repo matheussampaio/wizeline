@@ -4,7 +4,18 @@ node_js:
 services:
   - redis-server
 cache: yarn
+notifications:
+  email:
+    on_success: never # default: change
+    on_failure: always # default: always
 script:
-  - npm run build
+  - npm run build -- --cibuild
   - npm run lint
-  - npm run test
+  - npm run test -- --cibuild
+deploy:
+  provider: heroku
+  api_key: a0d003c6-a8d5-4dfc-b986-54d17b602cf7
+  skip_cleanup: true
+  buildpack: nodejs
+  app:
+    master: wizeshort
