@@ -9,6 +9,8 @@ bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
 
 // if we want to quickly erase the database
-// client.flushall();
+if (process.env.NODE_ENV === 'test') {
+    client.flushall();
+}
 
 export default client;

@@ -14,6 +14,10 @@ const argv = yargs
         description: 'Build a release version',
         type: 'boolean'
     })
+    .option('watch', {
+        description: 'Watch for tests',
+        type: 'boolean'
+    })
     .argv;
 
 const config = {
@@ -161,6 +165,18 @@ gulp.task('build:inject', ['build:pre:inject'], () => {
         .pipe(browserSync.stream());
 });
 
+gulp.task('test:server', () => {
+    process.env.NODE_ENV = 'test';
+
+    return gulp.src('**/*.spec.js', { read: false, cwd: 'server' })
+        .pipe(plugins.mocha({
+            reporter: 'spec',
+            compilers: 'js:babel-core/register',
+            bail: argv.cibuild || argv.release,
+            watch: argv.watch
+        }));
+});
+
 gulp.task('watchs', (done) => {
     // Javascript Server
     gulp.watch('**/*.js', { cwd: 'server' }, ['build:js:server']);
@@ -182,7 +198,7 @@ gulp.task('watchs', (done) => {
 
 gulp.task('nodemon', (done) => {
     plugins.nodemon({
-        script: 'dist/index.js',
+        script: 'dist/server.js',
         watch: [
             'dist'
         ],
