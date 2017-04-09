@@ -1,5 +1,8 @@
-@import "variables";
+@import "node_modules/angular-material/angular-material.scss";
 
-@import "node_modules/angular-material/angular-material";
+/**
+ * INJECTED COMPONENTS SCSS
+ */
 
-@import "wizeshort";
+//- inject:scss
+//- endinject
