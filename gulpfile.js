@@ -193,6 +193,9 @@ gulp.task('watchs', (done) => {
     // index.html
     gulp.watch('app/index.html', ['build:inject']);
 
+    // SCSS
+    gulp.watch('**/*.scss', { cwd: 'app' }, ['build:scss']);
+
     done();
 });
 
