@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import request from 'request';
 
 import client from '../database';
 
@@ -51,29 +52,34 @@ class Shorten {
             return Promise.reject({ status: 406, code: 'MISSING_URL_PARAM' });
         }
 
+        const hasProtocol = /^(?:f|ht)tps?\:\/\//; // eslint-disable-line
+
+        if (!hasProtocol.test(url)) {
+            url = `http://${url}`;
+        }
+
         const data = {};
 
         // check if this long url already exists in our database
         return this.getHash(url)
             .then((hash) => {
-                data.hash = hash;
                 data.md5Key = `md5:${hash}`;
 
                 return client.existsAsync(data.md5Key);
             })
             .then((exists) => {
-                data.exists = exists;
-
                 // if not, just continue
                 if (exists) {
                     return Promise.resolve();
                 }
 
-                // add this key to our index so we can fetch all md5 later
-                client.rpushAsync('allmd5', data.md5Key)
-                    .catch(error => console.error(error));
-
-                return client.setAsync(data.md5Key, url);
+                return this.validadeUrl(url).then(() => {
+                    // add this key to our index so we can fetch all md5 later
+                    return Promise.all([
+                        client.rpushAsync('allmd5', data.md5Key),
+                        client.setAsync(data.md5Key, url)
+                    ]);
+                });
             })
             // generate an unique shorten url or use a custom one
             .then(() => {
@@ -88,23 +94,36 @@ class Shorten {
                 data.shortenUrl = shortenUrl;
                 data.shortenUrlKey = `shortenurl:${shortenUrl}`;
 
-                // add this key to our index so we can fetch all shorten urls later
-                client.rpushAsync('allshortenurls', data.shortenUrlKey)
-                    .catch(error => console.error(error));
+                return Promise.all([
+                    // add this key to our index so we can fetch all shorten urls later
+                    client.rpushAsync('allshortenurls', data.shortenUrlKey),
 
-                // add the shorten url with his initial data and fetch the data
-                return client.hmsetAsync(data.shortenUrlKey,
-                    'shorten_url', shortenUrl,
-                    'long_url_md5', data.md5Key,
-                    'clicks', 0,
-                    'create_on', new Date().getTime()
-                );
+                    // add the shorten url with his initial data and fetch the data
+                    client.hmsetAsync(data.shortenUrlKey,
+                        'shorten_url', shortenUrl,
+                        'long_url_md5', data.md5Key,
+                        'clicks', 0,
+                        'create_on', new Date().getTime()
+                    )
+                ]);
             })
             .then(() => {
                 return this.get({
                     shortenUrl: data.shortenUrl
                 });
             });
+    }
+
+    validadeUrl(url) {
+        return new Promise((resolve, reject) => {
+            request.get(url, (error) => {
+                if (error) {
+                    return reject({ status: 406, code: 'INVALID_URL' });
+                }
+
+                return resolve(url);
+            });
+        });
     }
 
     getUniqueShortenUrl() {
