@@ -42,6 +42,11 @@ server.post('/api/custom', (req, res) => {
         .catch(error => res.status(error.status).send({ error }));
 });
 
+server.all('/urls', (req, res) => {
+    // Just send the index.html for other files to support HTML5Mode
+    res.sendFile(path.resolve('public/index.html'));
+});
+
 server.get('/:shortenurl', (req, res) => {
     Shorten.get({ shortenUrl: req.params.shortenurl })
         .then((data) => {

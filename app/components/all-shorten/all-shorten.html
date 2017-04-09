@@ -1,0 +1,22 @@
+<h1>Urls</h1>
+
+<md-content layout="column" layout-padding>
+    <table layout="column" class="table text-center">
+        <thead>
+            <tr layout>
+                <th flex>Shorten URL</th>
+                <th flex>Clicks</th>
+                <th flex>Created On</th>
+                <th flex>Long URL</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr layout ng-repeat="url in $ctrl.data.urls">
+                <td flex ng-bind="url.shorten_url"></td>
+                <td flex ng-bind="url.clicks"></td>
+                <td flex ng-bind="url.create_on | date:'medium'"></td>
+                <td flex ng-bind="url.long_url"></td>
+            </tr>
+        </tbody>
+    </table>
+</md-content>
