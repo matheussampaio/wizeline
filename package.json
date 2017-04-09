@@ -72,7 +72,8 @@
     "method-override": "2.3.8",
     "morgan": "1.8.1",
     "redis": "2.7.1",
-    "request": "^2.81.0"
+    "request": "^2.81.0",
+    "valid-url": "^1.0.9"
   },
   "engines": {
     "node": "7.8.0"

@@ -1,0 +1,6 @@
+<md-progress-linear
+    class="loading-bar animated"
+    ng-class="{ fadeOut: !$ctrl.LoadingService.isLoading() }"
+    md-mode="indeterminate"
+    ng-show="$ctrl.LoadingService.isLoading()">
+</md-progress-linear>

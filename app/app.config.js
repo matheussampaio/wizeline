@@ -26,7 +26,6 @@ function WizeshortConfig($stateProvider, $urlRouterProvider, $locationProvider, 
     $mdThemingProvider.theme('default')
         .primaryPalette('wizeshortPalette');
 
-
     const appState = {
         name: 'app',
         template: '<app flex layout="column"></app>',

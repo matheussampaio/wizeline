@@ -9,24 +9,23 @@
                     <div ng-message="md-maxlength">That's too long!</div>
                     <div ng-message="minlength">That's too short!</div>
                 </div>
+
             </md-input-container>
 
             <div class="main-btns-container">
                 <md-button type="submit" class="md-raised md-warn"
                     ng-if="$ctrl.data == null || $ctrl.url !== $ctrl.data.fullUrl"
-                    ng-disabled="shortenForm.$invalid"
+                    ng-disabled="shortenForm.$invalid || $ctrl.shorting"
                     ng-click="$ctrl.shortenUrl()">
-                    Shorten
+                    {{ $ctrl.shorting ? 'Shorting' : 'Shorten' }}
                 </md-button>
 
                 <md-button type="submit" class="md-raised md-primary"
                     ng-if="$ctrl.url && $ctrl.url === $ctrl.data.fullUrl"
                     ng-click="$ctrl.copyUrl()">
-                    Shorten
+                    Copy
                 </md-button>
             </div>
         </div>
-
-        <!-- <pre>{{ shortenForm | json }}</pre> -->
     </form>
 </div>

@@ -5,5 +5,6 @@ angular.module('wizeshort', [
     'ngMessages',
     'ngMaterial',
     'ngSanitize',
+    'ngStorage',
     'ui.router'
 ]);

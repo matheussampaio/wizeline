@@ -1,0 +1,14 @@
+html, body {
+    // background-color: $color1;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+}
+
+footer {
+    color: #777;
+    text-align: center;
+    padding-top: 15px;
+    min-height: 50px;
+}
