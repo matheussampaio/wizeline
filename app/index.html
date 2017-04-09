@@ -6,19 +6,29 @@
     <title>Wizeshort</title>
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js" charset="utf-8"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.js" charset="utf-8"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-resource.js" charset="utf-8"></script>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-aria.js" charset="utf-8"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.4.2/angular-ui-router.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.3/angular-material.css">
 
     <!-- inject:app:css -->
     <!-- endinject -->
-
 </head>
-<body ng-app="wizeshort" ng-strict-di>
+<body ng-app="wizeshort" ng-strict-di layout="column">
 
-    <div ui-view></div>
+    <div ui-view flex layout="column"></div>
+
+    <!-- AngularJs 1.6.1 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.js"></script>
+    <!-- Angular Resource Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-resource.js"></script>
+    <!-- Angular Material requires Angular.js Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-animate.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-aria.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-messages.js"></script>
+    <!-- Angular Material Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.3/angular-material.js"></script>
+    <!-- Angular Sanitaze Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-sanitize.js"></script>
+    <!-- Angular Ui Router Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.4.2/angular-ui-router.js"></script>
 
     <!-- inject:vendor:js -->
     <!-- endinject -->
