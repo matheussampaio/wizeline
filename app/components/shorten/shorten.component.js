@@ -1,13 +1,16 @@
 class ShortenController {
     /* @ngInject */
-    constructor($log, $mdToast, ShortenService, LoadingService) {
-        window.mShortenController = this; //eslint-disable-line
+    constructor($log, $mdToast, ShortenService, LoadingService, StorageService, WireshortDebug) {
+        if (WireshortDebug) {
+            window.mShortenController = this; //eslint-disable-line
+        }
 
         this.$log = $log;
         this.$mdToast = $mdToast;
 
         this.ShortenService = ShortenService;
         this.LoadingService = LoadingService;
+        this.StorageService = StorageService;
 
         this.shortLink = null;
         this.shorting = false;
@@ -28,6 +31,8 @@ class ShortenController {
             this.data.fullUrl = this.ShortenService.absUrl + this.data.shorten_url;
 
             this.url = this.data.fullUrl;
+
+            this.StorageService.addUrl(this.data);
 
             this.LoadingService.stop();
             this.shorting = false;

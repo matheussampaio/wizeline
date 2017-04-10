@@ -1,7 +1,9 @@
 class AppController {
     /* @ngInject */
-    constructor(LoadingService) {
-        window.mAppController = this; //eslint-disable-line
+    constructor(LoadingService, WireshortDebug) {
+        if (WireshortDebug) {
+            window.mAppController = this; //eslint-disable-line
+        }
 
         this.LoadingService = LoadingService;
     }

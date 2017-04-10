@@ -1,4 +1,11 @@
-function WizeshortConfig($stateProvider, $urlRouterProvider, $locationProvider, $mdThemingProvider) {
+let DEBUG_MODE = true; // eslint-disable-line
+
+// gulp-inject-debug-mode
+
+function WizeshortConfig($stateProvider, $urlRouterProvider, $locationProvider, $mdThemingProvider,
+    $localStorageProvider, $compileProvider, $logProvider) {
+    $compileProvider.preAssignBindingsEnabled(true);
+
     $mdThemingProvider.definePalette('wizeshortPalette', {
         50: '#ffebee',
         100: '#ffcdd2',
@@ -25,6 +32,10 @@ function WizeshortConfig($stateProvider, $urlRouterProvider, $locationProvider, 
 
     $mdThemingProvider.theme('default')
         .primaryPalette('wizeshortPalette');
+
+    $localStorageProvider.setKeyPrefix('wizeshort');
+
+    $logProvider.debugEnabled(DEBUG_MODE);
 
     const appState = {
         name: 'app',
@@ -56,4 +67,6 @@ function WizeshortConfig($stateProvider, $urlRouterProvider, $locationProvider, 
     $locationProvider.html5Mode(true);
 }
 
-angular.module('wizeshort').config(WizeshortConfig);
+angular.module('wizeshort')
+    .config(WizeshortConfig)
+    .constant('WireshortDebug', DEBUG_MODE);

@@ -59,6 +59,7 @@ gulp.task('build:js:web', [], () => (
         }))
         .pipe(plugins.sourcemaps.init())
         .pipe(plugins.changed('public/app'))
+        .pipe(plugins.if(argv.release, plugins.replace(/\/\/ gulp-inject-debug-mode/g, 'DEBUG_MODE = false;')))
         .pipe(plugins.iife({ useStrict: false, trimCode: false }))
         .pipe(plugins.if(argv.release, plugins.concat('app.js')))
         .pipe(plugins.babel())

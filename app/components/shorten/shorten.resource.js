@@ -1,7 +1,9 @@
 class ShortenResource {
     /* @ngInject */
-    constructor($resource) {
-        window.mShortenResource = this; // eslint-disable-line
+    constructor($resource, WireshortDebug) {
+        if (WireshortDebug) {
+            window.mShortenResource = this; // eslint-disable-line
+        }
 
         this.resource = $resource('/api/shorten');
     }

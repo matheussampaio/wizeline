@@ -1,7 +1,9 @@
 class ShortenService {
     /* @ngInject */
-    constructor($log, $location, ShortenResource) {
-        window.mShortenService = this; // eslint-disable-line
+    constructor($log, $location, ShortenResource, WireshortDebug) {
+        if (WireshortDebug) {
+            window.mShortenService = this; // eslint-disable-line
+        }
 
         this.$log = $log;
 
