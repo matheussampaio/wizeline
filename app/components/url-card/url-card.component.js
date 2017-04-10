@@ -14,6 +14,8 @@ class UrlCardController {
         this.ShortenService.get(this.url.shorten_url)
             .then((response) => {
                 this.url.clicks = response.clicks;
+
+                this.show = true;
             })
             .catch((response) => {
                 if (response.data.error.code === 'SHORTEN_URL_NOT_FOUND') {
@@ -39,7 +41,7 @@ class UrlCardController {
         );
     }
 
-    edit(event) {
+    customizeUrl(event) {
         const confirm = this.$mdDialog.prompt()
             .title('Customize your url:')
             .placeholder('Custom Url')
@@ -50,13 +52,37 @@ class UrlCardController {
             .cancel('Cancel');
 
         this.$mdDialog.show(confirm)
-            .then(customUrl => this.onSave(customUrl));
+            .then(customUrl => this.onSave(customUrl))
+            .catch(() => {});
+    }
+
+    deleteUrl(event) {
+        const confirm = this.$mdDialog.confirm()
+          .title('Delete this url?')
+          .targetEvent(event)
+          .ok('Delete')
+          .cancel('Cancel');
+
+        this.$mdDialog.show(confirm)
+            .then(() => this.onDelete())
+            .catch(() => {});
     }
 
     onSave(customUrl) {
+        if (customUrl === this.url.shorten_url) {
+            return;
+        }
+
         this.LoadingService.start();
 
-        this.ShortenService.shortenCustomUrl(this.url.long_url, customUrl)
+        const body = {
+            url: this.url.long_url,
+            custom: customUrl,
+            token: this.url.token,
+            shortenUrl: this.url.shorten_url
+        };
+
+        this.ShortenService.shortenCustomUrl(body)
             .then((data) => {
                 this.LoadingService.stop();
 
@@ -65,6 +91,24 @@ class UrlCardController {
                 shorten.fullUrl = this.ShortenService.absUrl + shorten.shorten_url;
 
                 this.StorageService.update(this.url.shorten_url, shorten);
+            })
+            .catch((response) => {
+                this.LoadingService.stop();
+
+                this.shortenCtrl.showErrorToast(response.data.error);
+            });
+    }
+
+    onDelete() {
+        this.LoadingService.start();
+
+        this.$log.log('onDelete', { url: this.url });
+
+        this.ShortenService.deleteUrl(this.url.shorten_url, this.url.token)
+            .then(() => {
+                this.LoadingService.stop();
+
+                this.StorageService.remove(this.url.shorten_url);
             })
             .catch((response) => {
                 this.LoadingService.stop();

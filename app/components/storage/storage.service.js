@@ -27,7 +27,7 @@ class StorageService {
     }
 
     remove(url) {
-        this.$storage.shortenUrl = this.$storage.shortenUrl.filter(e => e.shorten_url !== url.shorten_url);
+        this.$storage.shortenUrl = this.$storage.shortenUrl.filter(e => e.shorten_url !== url);
     }
 
     slice() {
@@ -46,6 +46,7 @@ class StorageService {
             obj.clicks = newObj.clicks;
             obj.created_on = newObj.created_on;
             obj.fullUrl = newObj.fullUrl;
+            obj.token = newObj.token;
         }
 
     }

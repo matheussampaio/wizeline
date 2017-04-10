@@ -37,7 +37,7 @@ class Shorten {
                 return Promise.reject({ status: 404, code: 'SHORTEN_URL_NOT_FOUND', shortenUrl, key });
             }
 
-            if (deleteToken) {
+            if (deleteToken && process.env.NODE_ENV === 'production') {
                 delete data.token;
             }
 

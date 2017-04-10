@@ -1,4 +1,4 @@
-<md-card class="url-card">
+<md-card class="url-card" ng-if="$ctrl.show">
     <md-card-title>
         <md-card-title-text>
             <a class="md-headline long-url" ng-href="{{ $ctrl.url.long_url }}" ng-bind="$ctrl.url.long_url"></a>
@@ -11,12 +11,16 @@
                 <input ng-attr-id="{{ $ctrl.url.shorten_url }}" class="copy-input" ng-value="$ctrl.url.fullUrl" tabindex="-1" readonly></a>
             </small>
 
-            <md-button class="md-warn copy-small" ng-click="$ctrl.edit()">
-                Edit
+            <md-button class="md-warn copy-small" ng-click="$ctrl.customizeUrl()">
+                CUSTOMIZE
             </md-button>
 
             <md-button class="md-warn copy-small" ng-click="$ctrl.copyUrl()" >
-                Copy
+                COPY
+            </md-button>
+
+            <md-button class="md-danger copy-small" ng-click="$ctrl.deleteUrl()" >
+                DELETE
             </md-button>
         </div>
         <div>

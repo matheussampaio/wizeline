@@ -27,24 +27,27 @@ class ShortenController {
         this.shorting = true;
         this.previousUrl = this.url;
 
-        this.ShortenService.shortenUrl(this.url).then((data) => {
-            this.data = data.shorten;
-            this.data.fullUrl = this.ShortenService.absUrl + this.data.shorten_url;
+        this.ShortenService.shortenUrl(this.url)
+            .then((data) => {
+                this.data = data.shorten;
+                this.data.fullUrl = this.ShortenService.absUrl + this.data.shorten_url;
 
-            this.url = this.data.fullUrl;
+                this.url = this.data.fullUrl;
 
-            this.StorageService.addUrl(this.data);
+                this.StorageService.addUrl(this.data);
 
-            this.LoadingService.stop();
-            this.shorting = false;
-        }).catch((response) => {
-            this.error = response.data;
+                this.LoadingService.stop();
+                this.shorting = false;
+                this.$log.log('shorten', this.data);
+            })
+            .catch((response) => {
+                this.error = response.data;
 
-            this.showErrorToast(response.data.error);
+                this.showErrorToast(response.data.error);
 
-            this.LoadingService.stop();
-            this.shorting = false;
-        });
+                this.LoadingService.stop();
+                this.shorting = false;
+            });
     }
 
     copyUrl() {

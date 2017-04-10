@@ -21,16 +21,22 @@ class ShortenService {
         return this.resource.get().$promise;
     }
 
+    deleteUrl(id, token) {
+        this.$log.log('ShortenService::deleteUrl', { id, token });
+
+        return this.resource.delete({ id, token }).$promise;
+    }
+
     shortenUrl(url) {
         this.$log.log('ShortenService::shortenUrl', { url });
 
         return this.resource.save({ url }).$promise;
     }
 
-    shortenCustomUrl(url, custom) {
-        this.$log.log('ShortenService::shortenCustomUrl', { url, custom });
+    shortenCustomUrl({ url, custom, shortenUrl, token }) {
+        this.$log.log('ShortenService::shortenCustomUrl', { url, custom, shortenUrl, token });
 
-        return this.resource.custom({ url, custom }).$promise;
+        return this.resource.custom({ url, custom, shortenUrl, token }).$promise;
     }
 }
 
