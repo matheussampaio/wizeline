@@ -71,10 +71,9 @@ describe('POST: /api/custom', () => {
 
     it('should shorten the url with a custom url', (done) => {
         chai.request(server)
-            .post('/api/custom')
+            .post('/api/shorten')
             .send({
-                url: data.url,
-                custom: data.custom
+                url: data.url
             })
             .end((err, res) => {
                 expect(err).to.equal(null);
@@ -86,10 +85,31 @@ describe('POST: /api/custom', () => {
                 data.shorten = shorten.shorten_url;
 
                 expect(shorten.long_url).to.equal(data.url);
-                expect(shorten.shorten_url).to.equal(data.custom);
                 expect(shorten.clicks).to.equal('0');
 
-                done();
+                chai.request(server)
+                    .post('/api/custom')
+                    .send({
+                        url: shorten.long_url,
+                        custom: data.custom,
+                        token: shorten.token,
+                        shortenUrl: shorten.shorten_url
+                    })
+                    .end((err, res) => {
+                        expect(err).to.equal(null);
+                        expect(res.status).to.equal(200);
+                        expect(res.type).to.equal('application/json');
+
+                        const shorten = res.body.shorten;
+
+                        data.shorten = shorten.shorten_url;
+
+                        expect(shorten.long_url).to.equal(data.url);
+                        expect(shorten.shorten_url).to.equal(data.custom);
+                        expect(shorten.clicks).to.equal('0');
+
+                        done();
+                    });
             });
     });
 
@@ -97,10 +117,9 @@ describe('POST: /api/custom', () => {
         data.custom = new Date().getTime().toString();
 
         chai.request(server)
-            .post('/api/custom')
+            .post('/api/shorten')
             .send({
-                url: data.url,
-                custom: data.custom
+                url: data.url
             })
             .end((err, res) => {
                 expect(err).to.equal(null);
@@ -112,24 +131,45 @@ describe('POST: /api/custom', () => {
                 data.shorten = shorten.shorten_url;
 
                 expect(shorten.long_url).to.equal(data.url);
-                expect(shorten.shorten_url).to.equal(data.custom);
                 expect(shorten.clicks).to.equal('0');
 
                 chai.request(server)
                     .post('/api/custom')
                     .send({
-                        url: data.url,
-                        custom: data.custom
+                        url: shorten.long_url,
+                        custom: data.custom,
+                        token: shorten.token,
+                        shortenUrl: shorten.shorten_url
                     })
                     .end((err, res) => {
-                        expect(err).to.not.equal(null);
-                        expect(res.status).to.equal(406);
+                        expect(err).to.equal(null);
+                        expect(res.status).to.equal(200);
                         expect(res.type).to.equal('application/json');
 
-                        expect(res.body.error).to.not.equal(null);
-                        expect(res.body.error.code).to.equal('CUSTOM_URL_TAKEN');
+                        const shorten = res.body.shorten;
 
-                        done();
+                        data.shorten = shorten.shorten_url;
+
+                        expect(shorten.long_url).to.equal(data.url);
+                        expect(shorten.shorten_url).to.equal(data.custom);
+                        expect(shorten.clicks).to.equal('0');
+
+                        chai.request(server)
+                            .post('/api/custom')
+                            .send({
+                                url: data.url,
+                                custom: data.custom
+                            })
+                            .end((err, res) => {
+                                expect(err).to.not.equal(null);
+                                expect(res.status).to.equal(406);
+                                expect(res.type).to.equal('application/json');
+
+                                expect(res.body.error).to.not.equal(null);
+                                expect(res.body.error.code).to.equal('CUSTOM_URL_TAKEN');
+
+                                done();
+                            });
                     });
             });
     });
@@ -138,19 +178,39 @@ describe('POST: /api/custom', () => {
         data.custom = new Date().getTime().toString();
 
         chai.request(server)
-            .post('/api/custom')
+            .post('/api/shorten')
             .send({
-                custom: data.custom
+                url: data.url
             })
             .end((err, res) => {
-                expect(err).to.not.equal(null);
-                expect(res.status).to.equal(406);
+                expect(err).to.equal(null);
+                expect(res.status).to.equal(200);
                 expect(res.type).to.equal('application/json');
 
-                expect(res.body.error).to.not.equal(null);
-                expect(res.body.error.code).to.equal('MISSING_URL_PARAM');
+                const shorten = res.body.shorten;
 
-                done();
+                data.shorten = shorten.shorten_url;
+
+                expect(shorten.long_url).to.equal(data.url);
+                expect(shorten.clicks).to.equal('0');
+
+                chai.request(server)
+                    .post('/api/custom')
+                    .send({
+                        custom: data.custom,
+                        token: shorten.token,
+                        shortenUrl: shorten.shorten_url
+                    })
+                    .end((err, res) => {
+                        expect(err).to.not.equal(null);
+                        expect(res.status).to.equal(406);
+                        expect(res.type).to.equal('application/json');
+
+                        expect(res.body.error).to.not.equal(null);
+                        expect(res.body.error.code).to.equal('MISSING_URL_PARAM');
+
+                        done();
+                    });
             });
     });
 
@@ -195,12 +255,22 @@ describe('GET: /:shortenurl', () => {
 
     it('should redirect to the long_url if exists', (done) => {
         chai.request(server)
-            .post('/api/custom')
+            .post('/api/shorten')
             .send({
-                url: data.url,
-                custom: data.custom
+                url: data.url
             })
             .end((err, res) => {
+                expect(err).to.equal(null);
+                expect(res.status).to.equal(200);
+                expect(res.type).to.equal('application/json');
+
+                const shorten = res.body.shorten;
+
+                data.shorten = shorten.shorten_url;
+
+                expect(shorten.long_url).to.equal(data.url);
+                expect(shorten.clicks).to.equal('0');
+
                 chai.request(server)
                     .get(`/${res.body.shorten.shorten_url}`)
                     .end((err, res) => {
