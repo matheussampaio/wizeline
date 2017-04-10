@@ -1,12 +1,17 @@
 class UrlCardController {
     /* @ngInject */
-    constructor($log, $mdToast) {
+    constructor($log, $mdToast, ShortenService) {
         this.$log = $log;
         this.$mdToast = $mdToast;
+
+        this.ShortenService = ShortenService;
     }
 
     $onInit() {
-        // TODO: fetch clicks!
+        this.ShortenService.get(this.url.shorten_url)
+            .then((response) => {
+                this.url.clicks = response.clicks;
+            });
 
         this.editing = false;
     }
