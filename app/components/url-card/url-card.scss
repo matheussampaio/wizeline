@@ -1,0 +1,40 @@
+url-card {
+    display: block;
+
+    .url-card {
+        display: block;
+        margin: 0;
+        margin-bottom: 16px;
+    }
+
+    md-card-title-text {
+        max-width: 100%;
+    }
+
+    a.long-url {
+        color: $color1;
+        text-decoration: none;
+        max-width: 100%;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    a.shorten-url {
+        color: $color5;
+        text-decoration: none;
+    }
+
+    button.copy-small {
+        font-size: 10px;
+        min-width: 0;
+        min-height: 25px;
+        line-height: 1;
+        border: 1px solid;
+    }
+
+    .copy-input {
+        position: absolute;
+        left: -10000px;
+    }
+}
