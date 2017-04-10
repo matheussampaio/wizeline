@@ -1,13 +1,11 @@
 import crypto from 'crypto';
-import request from 'request';
 import validUrl from 'valid-url';
 
 import client from '../database';
+import utils from '../utils/utils';
 
 class Shorten {
     constructor() {
-        this.alphabet = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-
         // number of urls we can store with X chars
         //
         // alphabet.length ** X:
@@ -30,18 +28,48 @@ class Shorten {
             });
     }
 
-    get({ shortenUrl, key }) {
+    get({ shortenUrl, key, deleteToken = true }) {
         const shortenUrlKey = `shortenurl:${shortenUrl}`;
 
         // first, get the shorten url obj
         return client.hgetallAsync(key || shortenUrlKey).then((data) => {
             if (data == null) {
-                return Promise.reject({ status: 404, code: 'SHORTEN_URL_NOT_FOUND', url: shortenUrl });
+                return Promise.reject({ status: 404, code: 'SHORTEN_URL_NOT_FOUND', shortenUrl, key });
+            }
+
+            if (deleteToken) {
+                delete data.token;
             }
 
             // then, get the long url
             return client.getAsync(data.long_url_md5).then((longUrl) => {
                 data.long_url = longUrl;
+
+                return data;
+            });
+        });
+    }
+
+    delete({ shortenUrl, token }) {
+        const shortenUrlKey = `shortenurl:${shortenUrl}`;
+
+        // first, get the shorten url obj
+        return client.hgetallAsync(shortenUrlKey).then((data) => {
+            if (data == null) {
+                return Promise.reject({ status: 404, code: 'SHORTEN_URL_NOT_FOUND', url: shortenUrl });
+            }
+
+            if (data.token !== token) {
+                return Promise.reject({ status: 404, code: 'INVALID_TOKEN', url: shortenUrl, token });
+            }
+
+            const promises = Promise.all([
+                client.delAsync(shortenUrlKey),
+                client.lremAsync('allshortenurls', 0, shortenUrlKey)
+            ]);
+
+            return promises.then(() => {
+                data.deleted = true;
 
                 return data;
             });
@@ -104,13 +132,15 @@ class Shorten {
                         'shorten_url', shortenUrl,
                         'long_url_md5', data.md5Key,
                         'clicks', 0,
-                        'create_on', new Date().getTime()
+                        'create_on', new Date().getTime(),
+                        'token', utils.genToken()
                     )
                 ]);
             })
             .then(() => {
                 return this.get({
-                    shortenUrl: data.shortenUrl
+                    shortenUrl: data.shortenUrl,
+                    deleteToken: false
                 });
             });
     }
@@ -121,26 +151,21 @@ class Shorten {
                 return reject({ status: 406, code: 'INVALID_URL' });
             }
 
-            return request.head(url, (error) => {
+            return resolve(url);
 
-                if (error) {
-                    return reject({ status: 406, code: 'INVALID_URL' });
-                }
-
-                return resolve(url);
-            });
+            // return request.head(url, (error) => {
+            //
+            //     if (error) {
+            //         return reject({ status: 406, code: 'INVALID_URL' });
+            //     }
+            //
+            //     return resolve(url);
+            // });
         });
     }
 
     getUniqueShortenUrl() {
-        let shortenUrl = '';
-
-        // generate a random shorten url
-        for (let i = 0; i < this.urlLength; i++) {
-            const index = parseInt(Math.random() * this.alphabet.length, 10);
-
-            shortenUrl += this.alphabet[index];
-        }
+        const shortenUrl = utils.genToken(this.urlLength);
 
         // verify if that shorten url is unique, if not try again
         return this.verifyShortenUrl(shortenUrl).catch(() => this.getUniqueShortenUrl());

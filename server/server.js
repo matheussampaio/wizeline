@@ -29,6 +29,12 @@ server.get('/api/shorten/:url', (req, res) => {
         .catch(error => res.status(500).send({ error }));
 });
 
+server.delete('/api/shorten/:url', (req, res) => {
+    Shorten.delete({ shortenUrl: req.params.url, token: req.query.token })
+        .then(shorten => res.status(200).send(shorten))
+        .catch(error => res.status(500).send({ error }));
+});
+
 server.get('/api/shorten', (req, res) => {
     Shorten.getAll()
         .then(urls => res.status(200).send({ urls }))
@@ -43,7 +49,8 @@ server.post('/api/shorten', (req, res) => {
 
 server.post('/api/custom', (req, res) => {
     Shorten.verifyShortenUrl(req.body.custom)
-        .then(customUrl => Shorten.add({ url: req.body.url, customUrl }))
+        .then(() => Shorten.delete({ shortenUrl: req.body.shortenUrl, token: req.body.token }))
+        .then(() => Shorten.add({ url: req.body.url, customUrl: req.body.custom }))
         .then(shorten => res.status(200).send({ shorten }))
         .catch(error => res.status(error.status).send({ error }));
 });
