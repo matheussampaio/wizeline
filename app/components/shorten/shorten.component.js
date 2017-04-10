@@ -50,7 +50,7 @@ class ShortenController {
     copyUrl() {
         this.$log.log('ShortenController::copyUrl', this.data.fullUrl);
 
-        document.querySelector('#url').select(); // eslint-disable-line
+        document.getElementById('url').select(); // eslint-disable-line
         document.execCommand('copy'); // eslint-disable-line
     }
 
