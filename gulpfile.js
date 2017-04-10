@@ -18,6 +18,10 @@ const argv = yargs
         description: 'Watch for tests',
         type: 'boolean'
     })
+    .option('cibuild', {
+        description: 'CI Build option',
+        type: 'boolean'
+    })
     .argv;
 
 const config = {
