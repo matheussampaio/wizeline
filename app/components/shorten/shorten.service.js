@@ -11,6 +11,10 @@ class ShortenService {
         this.resource = ShortenResource.get();
     }
 
+    get(shortenUrl) {
+        return this.resource.get({ id: shortenUrl }).$promise;
+    }
+
     getAll() {
         this.$log.log('ShortenService::getAll');
 

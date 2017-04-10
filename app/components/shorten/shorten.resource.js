@@ -5,7 +5,7 @@ class ShortenResource {
             window.mShortenResource = this; // eslint-disable-line
         }
 
-        this.resource = $resource('/api/shorten');
+        this.resource = $resource('/api/shorten/:id');
     }
 
     get() {
