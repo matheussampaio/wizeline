@@ -22,7 +22,7 @@ class UrlCardController {
     copyUrl() {
         this.$log.log('ShortenController::copyUrl', this.url.fullUrl);
 
-        document.querySelector(`#${this.url.shorten_url}`).select(); // eslint-disable-line
+        document.getElementById(this.url.shorten_url).select(); // eslint-disable-line
         document.execCommand('copy'); // eslint-disable-line
 
         this.showCopyToast();
