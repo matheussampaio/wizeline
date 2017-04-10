@@ -26,6 +26,10 @@ class StorageService {
         this.slice();
     }
 
+    remove(url) {
+        this.$storage.shortenUrl = this.$storage.shortenUrl.filter(e => e.shorten_url !== url.shorten_url);
+    }
+
     slice() {
         const length = this.$storage.shortenUrl.length;
 

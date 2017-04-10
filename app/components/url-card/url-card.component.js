@@ -14,6 +14,11 @@ class UrlCardController {
         this.ShortenService.get(this.url.shorten_url)
             .then((response) => {
                 this.url.clicks = response.clicks;
+            })
+            .catch((response) => {
+                if (response.data.error.code === 'SHORTEN_URL_NOT_FOUND') {
+                    this.StorageService.remove(this.url);
+                }
             });
 
         this.editing = false;
