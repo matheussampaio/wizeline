@@ -5,7 +5,12 @@ class ShortenResource {
             window.mShortenResource = this; // eslint-disable-line
         }
 
-        this.resource = $resource('/api/shorten/:id');
+        this.resource = $resource('/api/shorten/:id', {}, {
+            custom: {
+                method: 'POST',
+                url: '/api/custom'
+            }
+        });
     }
 
     get() {

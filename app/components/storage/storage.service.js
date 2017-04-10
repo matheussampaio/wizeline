@@ -33,6 +33,18 @@ class StorageService {
             this.$storage.shortenUrl = this.$storage.shortenUrl.slice(length - this.MAX_ELEMENTS);
         }
     }
+
+    update(old, newObj) {
+        const obj = this.$storage.shortenUrl.find(e => e.shorten_url === old);
+
+        if (obj) {
+            obj.shorten_url = newObj.shorten_url;
+            obj.clicks = newObj.clicks;
+            obj.created_on = newObj.created_on;
+            obj.fullUrl = newObj.fullUrl;
+        }
+
+    }
 }
 
 angular.module('wizeshort')
