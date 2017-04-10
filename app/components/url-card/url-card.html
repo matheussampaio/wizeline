@@ -7,16 +7,12 @@
     <md-card-footer layout layout-align="space-between center">
         <div layout layout-align="left center">
             <small>
-                <a class="shorten-url" ng-href="{{ $ctrl.url.fullUrl }}" ng-bind="$ctrl.url.fullUrl"></a>
+                <a class="shorten-url" ui-href="{{ $ctrl.url.fullUrl }}" ng-bind="$ctrl.url.fullUrl"></a>
                 <input ng-attr-id="{{ $ctrl.url.shorten_url }}" class="copy-input" ng-value="$ctrl.url.fullUrl" tabindex="-1" readonly></a>
             </small>
 
-            <md-button class="md-warn copy-small" ng-click="$ctrl.edit()" ng-if="!$ctrl.editing">
+            <md-button class="md-warn copy-small" ng-click="$ctrl.edit()">
                 Edit
-            </md-button>
-
-            <md-button class="md-primary copy-small" ng-click="$ctrl.save()" ng-if="$ctrl.editing">
-                Save
             </md-button>
 
             <md-button class="md-warn copy-small" ng-click="$ctrl.copyUrl()" >

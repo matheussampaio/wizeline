@@ -26,6 +26,12 @@ class ShortenService {
 
         return this.resource.save({ url }).$promise;
     }
+
+    shortenCustomUrl(url, custom) {
+        this.$log.log('ShortenService::shortenCustomUrl', { url, custom });
+
+        return this.resource.custom({ url, custom }).$promise;
+    }
 }
 
 angular.module('wizeshort')

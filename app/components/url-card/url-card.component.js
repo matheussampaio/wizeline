@@ -1,10 +1,13 @@
 class UrlCardController {
     /* @ngInject */
-    constructor($log, $mdToast, ShortenService) {
+    constructor($log, $mdToast, $mdDialog, ShortenService, LoadingService, StorageService) {
         this.$log = $log;
         this.$mdToast = $mdToast;
+        this.$mdDialog = $mdDialog;
 
         this.ShortenService = ShortenService;
+        this.LoadingService = LoadingService;
+        this.StorageService = StorageService;
     }
 
     $onInit() {
@@ -31,18 +34,47 @@ class UrlCardController {
         );
     }
 
-    edit() {
-        this.editing = true;
+    edit(event) {
+        const confirm = this.$mdDialog.prompt()
+            .title('Customize your url:')
+            .placeholder('Custom Url')
+            .ariaLabel('Custom Url')
+            .initialValue(this.url.shorten_url)
+            .targetEvent(event)
+            .ok('Save')
+            .cancel('Cancel');
+
+        this.$mdDialog.show(confirm)
+            .then(customUrl => this.onSave(customUrl));
     }
 
-    save() {
-        this.editing = false;
+    onSave(customUrl) {
+        this.LoadingService.start();
+
+        this.ShortenService.shortenCustomUrl(this.url.long_url, customUrl)
+            .then((data) => {
+                this.LoadingService.stop();
+
+                const shorten = data.shorten;
+
+                shorten.fullUrl = this.ShortenService.absUrl + shorten.shorten_url;
+
+                this.StorageService.update(this.url.shorten_url, shorten);
+            })
+            .catch((response) => {
+                this.LoadingService.stop();
+
+                this.shortenCtrl.showErrorToast(response.data.error);
+            });
     }
 }
 
 angular.module('wizeshort').component('urlCard', {
     controller: UrlCardController,
     templateUrl: 'url-card/url-card.html',
+    require: {
+        shortenCtrl: '^shorten'
+    },
     bindings: {
         url: '<'
     }

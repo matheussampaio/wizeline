@@ -17,7 +17,8 @@ class ShortenController {
         this.url = '';
 
         this.errors = {
-            INVALID_URL: 'Invalid URL'
+            INVALID_URL: 'Invalid URL',
+            CUSTOM_URL_TAKEN: 'Custom url taken'
         };
     }
 

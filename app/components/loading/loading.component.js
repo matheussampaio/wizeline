@@ -2,8 +2,10 @@ class LoadingController {
     /* @ngInject */
     constructor(LoadingService, WireshortDebug) {
         if (WireshortDebug) {
-            window.LoadingService = LoadingService; // eslint-disable-line
+            window.mLoadingController = this; // eslint-disable-line
         }
+
+        this.LoadingService = LoadingService;
     }
 }
 
