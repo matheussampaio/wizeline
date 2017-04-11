@@ -6,5 +6,6 @@ angular.module('wizeshort', [
     'ngMaterial',
     'ngSanitize',
     'ngStorage',
+    'md.data.table',
     'ui.router'
 ]);

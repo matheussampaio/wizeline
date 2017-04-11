@@ -15,10 +15,10 @@ class ShortenService {
         return this.resource.get({ id: shortenUrl }).$promise;
     }
 
-    getAll() {
+    getAll(query = {}) {
         this.$log.log('ShortenService::getAll');
 
-        return this.resource.get().$promise;
+        return this.resource.get(query).$promise;
     }
 
     deleteUrl(id, token) {

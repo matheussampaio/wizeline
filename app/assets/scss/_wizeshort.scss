@@ -12,3 +12,11 @@ footer {
     padding-top: 15px;
     min-height: 50px;
 }
+
+a {
+    color: $color5;
+
+    &:visited {
+        color: darken($color5, 40%);
+    }
+}

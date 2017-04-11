@@ -61,6 +61,10 @@ class ShortenController {
             this.$mdToast.simple().textContent(this.errors[error.code])
         );
     }
+
+    clearUrl() {
+        this.url = '';
+    }
 }
 
 angular.module('wizeshort').component('shorten', {

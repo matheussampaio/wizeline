@@ -4,13 +4,14 @@
         <form novalidate name="shortenForm">
             <div layout flex>
                 <md-input-container flex md-no-float>
-                    <input id="url" name="url" class="form-control" type="text" placeholder="Paste a link" ng-model="$ctrl.url" required maxlength="2000">
+                    <input id="url" name="url" class="url-input" class="form-control" type="text" placeholder="Paste a link" ng-model="$ctrl.url" required maxlength="2000">
+                    <div class="clear-btn-container">
+                        <button ng-if="$ctrl.url.length" ng-click="$ctrl.clearUrl()">x</button>
+                    </div>
                     <div ng-messages="shortenForm.url.$error" ng-show="shortenForm.url.$dirty || shortenForm.url.$touched">
-                        <div ng-message="required">This is required!</div>
                         <div ng-message="md-maxlength">That's too long!</div>
                         <div ng-message="minlength">That's too short!</div>
                     </div>
-
                 </md-input-container>
 
                 <div class="main-btns-container">
@@ -21,7 +22,7 @@
                         {{ $ctrl.shorting ? 'Shorting' : 'Shorten' }}
                     </md-button>
 
-                    <md-button type="submit" class="md-raised md-primary"
+                    <md-button type="submit" class="md-raised md-primary copy-btn"
                         ng-if="$ctrl.url && $ctrl.url === $ctrl.data.fullUrl"
                         ng-click="$ctrl.copyUrl()">
                         Copy

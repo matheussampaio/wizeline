@@ -8,4 +8,27 @@ shorten {
     .main-btns-container {
         padding-top: 8px;
     }
+
+    input.url-input {
+        border-bottom: 1px solid $color5;
+        color: $color1;
+    }
+
+    .md-button.md-primary.md-raised.copy-btn {
+        color: $color5;
+    }
+
+    .clear-btn-container {
+        position: absolute;
+        right: 5px;
+
+        button {
+            background: none;
+            border: none;
+
+            &:hover {
+                color: $color5;
+            }
+        }
+    }
 }

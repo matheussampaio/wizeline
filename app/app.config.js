@@ -58,7 +58,7 @@ function WizeshortConfig($stateProvider, $urlRouterProvider, $locationProvider, 
         url: '/urls',
         name: 'urls',
         parent: 'app',
-        template: '<all-shorten></all-shorten>'
+        template: '<all-shorten layout="column" flex></all-shorten>'
     };
 
     $stateProvider

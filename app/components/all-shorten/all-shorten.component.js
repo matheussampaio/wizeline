@@ -13,10 +13,19 @@ class AllShortenController {
     }
 
     $onInit() {
-        this.ShortenService.getAll()
-            .then((data) => {
-                this.data = data;
-            });
+        this.query = {
+            limit: 10,
+            page: 1
+        };
+
+        this.getUrls = () => {
+            this.promise = this.ShortenService.getAll(this.query)
+                .then((data) => {
+                    this.data = data;
+                });
+        };
+
+        this.getUrls();
     }
 }
 
