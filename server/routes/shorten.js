@@ -18,13 +18,37 @@ class Shorten {
         this.urlLength = 7;
     }
 
-    getAll() {
+    getAll({ offset = 0, limit = 10 }) {
+        let total = 0;
+
+        offset = parseInt(offset, 10);
+        limit = parseInt(limit, 10);
+
         return client.llenAsync('allshortenurls')
-            .then(length => client.lrangeAsync('allshortenurls', 0, length))
+            .then((length) => {
+                total = length;
+                let end = length;
+
+                if (parseInt(limit, 10) < length) {
+                    end = (offset + limit) - 1;
+                }
+
+                return client.lrangeAsync('allshortenurls', offset, end);
+            })
             .then((allShortensUrl) => {
                 const promises = allShortensUrl.map(shortenUrl => this.get({ key: shortenUrl }));
 
                 return Promise.all(promises);
+            })
+            .then((docs) => {
+                const result = {
+                    offset,
+                    limit,
+                    total,
+                    docs
+                };
+
+                return result;
             });
     }
 

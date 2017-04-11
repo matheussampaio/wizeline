@@ -36,8 +36,8 @@ server.delete('/api/shorten/:url', (req, res) => {
 });
 
 server.get('/api/shorten', (req, res) => {
-    Shorten.getAll()
-        .then(urls => res.status(200).send({ urls }))
+    Shorten.getAll(req.query)
+        .then(data => res.status(200).send(data))
         .catch(error => res.status(500).send({ error }));
 });
 
