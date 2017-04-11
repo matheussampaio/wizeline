@@ -19,10 +19,10 @@
             <tbody md-body>
                 <tr md-row ng-repeat="url in $ctrl.data.docs">
                     <td md-cell>
-                        <a ng-href="{{ url.long_url }}" ng-bind="url.long_url"></a>
+                        <a target="_blank" ng-href="{{ url.long_url }}" ng-bind="url.long_url"></a>
                     </td>
                     <td md-cell>
-                        <a ng-href="{{ url.shorten_url }}" ng-bind="url.shorten_url"></a>
+                        <a target="_blank" ng-href="{{ url.shorten_url }}" ng-bind="url.shorten_url"></a>
                     </td>
                     <td md-cell ng-bind="url.create_on | date:'medium'"></td>
                     <td md-cell ng-bind="url.clicks | number:0"></td>
