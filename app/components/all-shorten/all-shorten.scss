@@ -12,4 +12,11 @@ all-shorten {
      md-checkbox.md-checked .md-ink-ripple, md-checkbox.md-default-theme.md-checked .md-icon, md-checkbox.md-checked .md-icon {
         background-color: #f84545;
     }
+
+    .long-url {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        max-width: 350px;
+        overflow: hidden;
+    }
 }
