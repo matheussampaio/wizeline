@@ -33,6 +33,10 @@ function WizeshortConfig($stateProvider, $urlRouterProvider, $locationProvider, 
     $mdThemingProvider.theme('default')
         .primaryPalette('wizeshortPalette');
 
+    $mdThemingProvider.enableBrowserColor({
+        hue: '500' // Default is '800'
+    });
+
     $localStorageProvider.setKeyPrefix('wizeshort');
 
     $logProvider.debugEnabled(DEBUG_MODE);

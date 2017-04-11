@@ -38,7 +38,6 @@ class ShortenController {
 
                 this.LoadingService.stop();
                 this.shorting = false;
-                this.$log.log('shorten', this.data);
             })
             .catch((response) => {
                 this.error = response.data;

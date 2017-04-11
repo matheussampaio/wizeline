@@ -37,7 +37,7 @@ class UrlCardController {
 
     showCopyToast() {
         this.$mdToast.show(
-            this.$mdToast.simple().textContent('Url copied')
+            this.$mdToast.simple().textContent('URL copied')
         );
     }
 
@@ -58,7 +58,7 @@ class UrlCardController {
 
     deleteUrl(event) {
         const confirm = this.$mdDialog.confirm()
-          .title('Delete this url?')
+          .title('Delete this URL?')
           .targetEvent(event)
           .ok('Delete')
           .cancel('Cancel');
@@ -108,7 +108,7 @@ class UrlCardController {
             .then(() => {
                 this.LoadingService.stop();
 
-                this.StorageService.remove(this.url.shorten_url);
+                this.StorageService.remove(this.url);
             })
             .catch((response) => {
                 this.LoadingService.stop();
