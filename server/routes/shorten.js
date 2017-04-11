@@ -130,7 +130,7 @@ class Shorten {
                 return this.validadeUrl(url).then(() => {
                     // add this key to our index so we can fetch all md5 later
                     return Promise.all([
-                        client.rpushAsync('allmd5', data.md5Key),
+                        client.lpushAsync('allmd5', data.md5Key),
                         client.setAsync(data.md5Key, url)
                     ]);
                 });
@@ -150,7 +150,7 @@ class Shorten {
 
                 return Promise.all([
                     // add this key to our index so we can fetch all shorten urls later
-                    client.rpushAsync('allshortenurls', data.shortenUrlKey),
+                    client.lpushAsync('allshortenurls', data.shortenUrlKey),
 
                     // add the shorten url with his initial data and fetch the data
                     client.hmsetAsync(data.shortenUrlKey,
