@@ -16,7 +16,14 @@ all-shorten {
     .long-url {
         white-space: nowrap;
         text-overflow: ellipsis;
-        max-width: 350px;
+        max-width: 250px;
+        overflow: hidden;
+    }
+
+    .shorten-url {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        max-width: 150px;
         overflow: hidden;
     }
 }

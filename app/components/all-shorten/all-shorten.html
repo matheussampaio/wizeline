@@ -10,7 +10,7 @@
             <thead md-head>
                 <tr md-row>
                     <th class="long-url" md-column md-numeric>Long URL</th>
-                    <th md-column><span>Shorten URL</span></th>
+                    <th class="shorten-url" md-column><span>Shorten URL</span></th>
                     <th md-column md-date>Created On</th>
                     <th md-column md-numeric><span>Clicks</span></th>
                     <th md-column><span>Token</span></th>
@@ -21,7 +21,7 @@
                     <td class="long-url" md-cell>
                         <a target="_blank" ng-href="{{ url.long_url }}" ng-bind="url.long_url"></a>
                     </td>
-                    <td md-cell>
+                    <td class="shorten-url" md-cell>
                         <a target="_blank" ng-href="{{ url.shorten_url }}" ng-bind="url.shorten_url"></a>
                     </td>
                     <td md-cell ng-bind="url.create_on | date:'medium'"></td>

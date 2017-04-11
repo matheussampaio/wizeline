@@ -6,8 +6,8 @@
     </md-card-title>
     <md-card-footer layout layout-align="space-between center">
         <div layout layout-align="left center">
-            <small>
-                <a class="shorten-url" target="_blank" ng-href="{{ $ctrl.url.fullUrl }}" ng-bind="$ctrl.url.fullUrl"></a>
+            <small class="shorten-url">
+                <a target="_blank" ng-href="{{ $ctrl.url.fullUrl }}" ng-bind="$ctrl.url.fullUrl"></a>
                 <input ng-attr-id="{{ $ctrl.url.shorten_url }}" class="copy-input" ng-value="$ctrl.url.fullUrl" tabindex="-1" readonly></a>
             </small>
 
