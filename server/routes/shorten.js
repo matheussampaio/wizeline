@@ -37,7 +37,9 @@ class Shorten {
                 return client.lrangeAsync('allshortenurls', offset, end);
             })
             .then((allShortensUrl) => {
-                const promises = allShortensUrl.map(shortenUrl => this.get({ key: shortenUrl, deleteToken: false }));
+                const promises = allShortensUrl.map(shortenUrl => (
+                    this.get({ key: shortenUrl, deleteToken: false }).catch()
+                ));
 
                 return Promise.all(promises);
             })
