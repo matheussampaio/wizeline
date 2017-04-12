@@ -9,7 +9,7 @@ notifications:
     on_success: never # default: change
     on_failure: always # default: always
 script:
-  - npm run build -- --cibuild
+  - npm run release -- --cibuild
   - npm run lint
   - npm run test -- --cibuild
 deploy:
