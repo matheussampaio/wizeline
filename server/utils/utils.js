@@ -13,4 +13,16 @@ function genToken(length = 20) {
     return token;
 }
 
-export default { genToken };
+function getInvalidChars(url) {
+    for (let i = 0; i < url.length; i++) {
+        const char = url[i];
+
+        if (ALPHABET.indexOf(char) === -1) {
+            return char;
+        }
+    }
+
+    return null;
+}
+
+export default { genToken, getInvalidChars };

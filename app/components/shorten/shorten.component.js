@@ -18,8 +18,9 @@ class ShortenController {
         this.url = '';
 
         this.errors = {
-            INVALID_URL: 'Invalid URL',
-            CUSTOM_URL_TAKEN: 'Custom url taken'
+            INVALID_URL: 'ERROR: Invalid URL',
+            CUSTOM_URL_TAKEN: 'ERRROR: Custom url taken',
+            INVALID_CHAR_PARAM: 'ERROR: Invalid char:'
         };
     }
 
@@ -58,8 +59,14 @@ class ShortenController {
     }
 
     showErrorToast(error) {
+        let content = this.errors[error.code];
+
+        if (error.code === 'INVALID_CHAR_PARAM') {
+            content += ` '${error.invalid}'`;
+        }
+
         this.$mdToast.show(
-            this.$mdToast.simple().textContent(this.errors[error.code])
+            this.$mdToast.simple().textContent(content)
         );
     }
 

@@ -276,6 +276,12 @@ class Shorten {
             return Promise.reject({ status: 406, code: 'MISSING_CUSTOM_PARAM' });
         }
 
+        const invalid = utils.getInvalidChars(shortenUrl);
+
+        if (invalid != null) {
+            return Promise.reject({ status: 406, code: 'INVALID_CHAR_PARAM', invalid });
+        }
+
         const shortenUrlKey = `shortenurl:${shortenUrl}`;
 
         // check if that shorten url key already exists
