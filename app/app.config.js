@@ -61,6 +61,13 @@ function WizeshortConfig($stateProvider, $urlRouterProvider, $locationProvider, 
         template: '<all-shorten layout="column" flex></all-shorten>'
     };
 
+    const topHostnamesState = {
+        url: '/top',
+        name: 'top',
+        parent: 'app',
+        template: '<top-hostnames layout="column" flex></top-hostnames>'
+    };
+
     const notFoundState = {
         url: '/404',
         name: '404',
@@ -72,7 +79,8 @@ function WizeshortConfig($stateProvider, $urlRouterProvider, $locationProvider, 
         .state(appState)
             .state(shortenState)
             .state(allShortenState)
-            .state(notFoundState);
+            .state(notFoundState)
+            .state(topHostnamesState);
 
     $urlRouterProvider.otherwise('/');
 

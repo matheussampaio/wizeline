@@ -67,6 +67,11 @@ server.post('/api/custom', (req, res) => {
         .catch(error => res.status(error.status).send({ error }));
 });
 
+server.all('/top', (req, res) => {
+    // Just send the index.html for other files to support HTML5Mode
+    res.sendFile(path.resolve('public/index.html'));
+});
+
 server.all('/urls', (req, res) => {
     // Just send the index.html for other files to support HTML5Mode
     res.sendFile(path.resolve('public/index.html'));

@@ -45,7 +45,6 @@ class Shorten {
     }
 
     checkTopHostname({ count, hostnameKey }) {
-        console.log('checkTopHostname', { count, hostnameKey });
         const hostname = hostnameKey.slice('hostname:'.length);
 
         const topHostname = this.topHostnames.find(e => e.hostname === hostname);
