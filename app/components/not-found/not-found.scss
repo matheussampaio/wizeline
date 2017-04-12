@@ -1,0 +1,20 @@
+not-found {
+    display: block;
+
+    .error-container {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .title {
+        color: $color5;
+        font-size: 48px;
+
+    }
+
+    .sub-title {
+        color: $color1;
+        font-size: 30px;
+    }
+}

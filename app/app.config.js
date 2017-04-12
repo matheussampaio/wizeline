@@ -61,10 +61,18 @@ function WizeshortConfig($stateProvider, $urlRouterProvider, $locationProvider, 
         template: '<all-shorten layout="column" flex></all-shorten>'
     };
 
+    const notFoundState = {
+        url: '/404',
+        name: '404',
+        parent: 'app',
+        template: '<not-found layout="column" flex></not-found>'
+    };
+
     $stateProvider
         .state(appState)
             .state(shortenState)
-            .state(allShortenState);
+            .state(allShortenState)
+            .state(notFoundState);
 
     $urlRouterProvider.otherwise('/');
 

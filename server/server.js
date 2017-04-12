@@ -60,6 +60,11 @@ server.all('/urls', (req, res) => {
     res.sendFile(path.resolve('public/index.html'));
 });
 
+server.all('/404', (req, res) => {
+    // Just send the index.html for other files to support HTML5Mode
+    res.sendFile(path.resolve('public/index.html'));
+});
+
 server.get('/:shortenurl', (req, res) => {
     Shorten.get({ shortenUrl: req.params.shortenurl })
         .then((data) => {
@@ -67,12 +72,9 @@ server.get('/:shortenurl', (req, res) => {
 
             res.redirect(301, data.long_url);
         })
-        .catch(error => res.status(404).send({
-            error,
-            status: 404,
-            message: 'Page not found',
-            shorten_url: req.params.shortenurl
-        }));
+        .catch(() => {
+            res.redirect('/404');
+        });
 });
 
 server.all('/*', (req, res) => {
