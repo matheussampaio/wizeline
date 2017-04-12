@@ -174,7 +174,7 @@ describe('POST: /api/custom', () => {
             });
     });
 
-    xit('should return an error if we don\'t send the url', (done) => {
+    it('should return an error if we don\'t send the url', (done) => {
         data.custom = new Date().getTime().toString();
 
         chai.request(server)
@@ -239,7 +239,7 @@ describe('GET: /:shortenurl', () => {
         url: 'http://www.example.com/'
     };
 
-    it('should return an error if the url doesn\t exists', (done) => {
+    xit('should return an error if the url doesn\t exists', (done) => {
         chai.request(server)
             .get(`/${data.custom}`)
             .end((err, res) => {
