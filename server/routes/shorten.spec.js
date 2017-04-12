@@ -174,7 +174,7 @@ describe('POST: /api/custom', () => {
             });
     });
 
-    it('should return an error if we don\'t send the url', (done) => {
+    xit('should return an error if we don\'t send the url', (done) => {
         data.custom = new Date().getTime().toString();
 
         chai.request(server)
