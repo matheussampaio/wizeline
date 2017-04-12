@@ -49,7 +49,13 @@ server.post('/api/shorten', (req, res) => {
 
 server.post('/api/custom', (req, res) => {
     Shorten.verifyShortenUrl(req.body.custom)
-        .then(() => Shorten.delete({ shortenUrl: req.body.shortenUrl, token: req.body.token }))
+        .then(() => {
+            if (req.body.deleteOld) {
+                return Shorten.delete({ shortenUrl: req.body.shortenUrl, token: req.body.token });
+            }
+
+            return Promise.resolve();
+        })
         .then(() => Shorten.add({ url: req.body.url, customUrl: req.body.custom }))
         .then(shorten => res.status(200).send({ shorten }))
         .catch(error => res.status(error.status).send({ error }));

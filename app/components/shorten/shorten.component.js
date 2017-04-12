@@ -1,12 +1,13 @@
 class ShortenController {
     /* @ngInject */
-    constructor($log, $mdToast, ShortenService, LoadingService, StorageService, WireshortDebug) {
+    constructor($log, $mdToast, $mdDialog, ShortenService, LoadingService, StorageService, WireshortDebug) {
         if (WireshortDebug) {
             window.mShortenController = this; //eslint-disable-line
         }
 
         this.$log = $log;
         this.$mdToast = $mdToast;
+        this.$mdDialog = $mdDialog;
 
         this.ShortenService = ShortenService;
         this.LoadingService = LoadingService;
@@ -64,6 +65,53 @@ class ShortenController {
 
     clearUrl() {
         this.url = '';
+    }
+
+    customizeUrl(event) {
+        const confirm = this.$mdDialog.prompt()
+            .title('Customize your url:')
+            .placeholder('Custom Url')
+            .ariaLabel('Custom Url')
+            .initialValue('')
+            .targetEvent(event)
+            .ok('Save')
+            .cancel('Cancel');
+
+        this.$mdDialog.show(confirm)
+            .then(customUrl => this.onSave(customUrl))
+            .catch(() => {});
+    }
+
+    onSave(customUrl) {
+        this.LoadingService.start();
+        this.shorting = true;
+        this.previousUrl = this.url;
+
+        const body = {
+            url: this.url,
+            custom: customUrl
+        };
+
+        this.ShortenService.shortenCustomUrl(body)
+            .then((data) => {
+                this.data = data.shorten;
+                this.data.fullUrl = this.ShortenService.$location.absUrl() + this.data.shorten_url;
+
+                this.url = this.data.fullUrl;
+
+                this.StorageService.addUrl(this.data);
+
+                this.LoadingService.stop();
+                this.shorting = false;
+            })
+            .catch((response) => {
+                this.error = response.data;
+
+                this.showErrorToast(response.data.error);
+
+                this.LoadingService.stop();
+                this.shorting = false;
+            });
     }
 }
 

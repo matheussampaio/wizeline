@@ -33,10 +33,10 @@ class ShortenService {
         return this.resource.save({ url }).$promise;
     }
 
-    shortenCustomUrl({ url, custom, shortenUrl, token }) {
-        this.$log.debug('ShortenService::shortenCustomUrl', { url, custom, shortenUrl, token });
+    shortenCustomUrl({ url, custom, shortenUrl, token, deleteOld }) {
+        this.$log.debug('ShortenService::shortenCustomUrl', { url, custom, shortenUrl, token, deleteOld });
 
-        return this.resource.custom({ url, custom, shortenUrl, token }).$promise;
+        return this.resource.custom({ url, custom, shortenUrl, token, deleteOld }).$promise;
     }
 }
 

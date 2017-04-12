@@ -79,7 +79,8 @@ class UrlCardController {
             url: this.url.long_url,
             custom: customUrl,
             token: this.url.token,
-            shortenUrl: this.url.shorten_url
+            shortenUrl: this.url.shorten_url,
+            deleteOld: true
         };
 
         this.ShortenService.shortenCustomUrl(body)
