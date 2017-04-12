@@ -27,7 +27,7 @@ class UrlCardController {
     }
 
     copyUrl() {
-        this.$log.log('ShortenController::copyUrl', this.url.fullUrl);
+        this.$log.debug('ShortenController::copyUrl', this.url.fullUrl);
 
         document.getElementById(this.url.shorten_url).select(); // eslint-disable-line
         document.execCommand('copy'); // eslint-disable-line
@@ -102,7 +102,7 @@ class UrlCardController {
     onDelete() {
         this.LoadingService.start();
 
-        this.$log.log('onDelete', { url: this.url });
+        this.$log.debug('onDelete', { url: this.url });
 
         this.ShortenService.deleteUrl(this.url.shorten_url, this.url.token)
             .then(() => {

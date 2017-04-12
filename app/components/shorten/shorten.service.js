@@ -16,25 +16,25 @@ class ShortenService {
     }
 
     getAll(query = {}) {
-        this.$log.log('ShortenService::getAll');
+        this.$log.debug('ShortenService::getAll');
 
         return this.resource.get(query).$promise;
     }
 
     deleteUrl(id, token) {
-        this.$log.log('ShortenService::deleteUrl', { id, token });
+        this.$log.debug('ShortenService::deleteUrl', { id, token });
 
         return this.resource.delete({ id, token }).$promise;
     }
 
     shortenUrl(url) {
-        this.$log.log('ShortenService::shortenUrl', { url });
+        this.$log.debug('ShortenService::shortenUrl', { url });
 
         return this.resource.save({ url }).$promise;
     }
 
     shortenCustomUrl({ url, custom, shortenUrl, token }) {
-        this.$log.log('ShortenService::shortenCustomUrl', { url, custom, shortenUrl, token });
+        this.$log.debug('ShortenService::shortenCustomUrl', { url, custom, shortenUrl, token });
 
         return this.resource.custom({ url, custom, shortenUrl, token }).$promise;
     }
