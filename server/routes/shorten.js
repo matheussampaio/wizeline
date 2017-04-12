@@ -1,3 +1,4 @@
+import URL from 'url';
 import crypto from 'crypto';
 import validUrl from 'valid-url';
 
@@ -16,6 +17,63 @@ class Shorten {
         //            916.132.832 === 5
         //             14.776.336 === 4
         this.urlLength = 7;
+        this.TOP_SIZE = 10;
+        this.topHostnames = [];
+
+        this.initTopHostnames();
+    }
+
+    getTopHostnames() {
+        return Promise.resolve(this.topHostnames);
+    }
+
+    initTopHostnames() {
+        return client.llenAsync('allhostnames')
+            .then((length) => {
+                return client.lrangeAsync('allhostnames', 0, length);
+            })
+            .then((allHostnames) => {
+                const promises = allHostnames.map(hostnameKey => (
+                    client.getAsync(hostnameKey).then(count => ({ count: parseInt(count, 10), hostnameKey }))
+                ));
+
+                return Promise.all(promises);
+            })
+            .then((result) => {
+                result.forEach(hostname => this.checkTopHostname(hostname));
+            });
+    }
+
+    checkTopHostname({ count, hostnameKey }) {
+        console.log('checkTopHostname', { count, hostnameKey });
+        const hostname = hostnameKey.slice('hostname:'.length);
+
+        const topHostname = this.topHostnames.find(e => e.hostname === hostname);
+
+        // this hostname is on the top, just update his count
+        if (topHostname) {
+            topHostname.count = count;
+
+        // this hostname isnt on the top, if we don't have TOP_SIZE hostnames,
+        // just add this one
+        } else if (this.topHostnames.length < this.TOP_SIZE) {
+            this.topHostnames.push({ count, hostname });
+
+        // otherwise,
+        } else {
+            // order,
+            this.topHostnames.sort((a, b) => b.count - a.count);
+
+            // check if greater than last element,
+            if (this.topHostnames[this.topHostnames.length - 1].count < count) {
+                // and switch
+                this.topHostnames[this.topHostnames.length - 1] = { count, hostname };
+            }
+        }
+
+        this.topHostnames.sort((a, b) => b.count - a.count);
+
+        return Promise.resolve(this.topHostnames);
     }
 
     getAll({ page = 1, limit = 10 }) {
@@ -164,12 +222,37 @@ class Shorten {
                     )
                 ]);
             })
+            .then(() => this.updateDomain(url))
             .then(() => {
                 return this.get({
                     shortenUrl: data.shortenUrl,
                     deleteToken: false
                 });
             });
+    }
+
+    updateDomain(url) {
+        const hostname = URL.parse(url).hostname;
+
+        if (hostname != null) {
+            const hostnameKey = `hostname:${hostname}`;
+
+            return client.existsAsync(hostnameKey)
+                .then((exists) => {
+                    if (exists) {
+                        return client.incrbyAsync(hostnameKey, 1);
+                    }
+
+                    return Promise.all([
+                        client.lpushAsync('allhostnames', hostnameKey),
+                        client.setAsync(hostnameKey, 1)
+                    ])
+                    .then(() => 1);
+                })
+                .then(count => this.checkTopHostname({ count, hostnameKey }));
+        }
+
+        return Promise.resolve();
     }
 
     validadeUrl(url) {
@@ -179,15 +262,6 @@ class Shorten {
             }
 
             return resolve(url);
-
-            // return request.head(url, (error) => {
-            //
-            //     if (error) {
-            //         return reject({ status: 406, code: 'INVALID_URL' });
-            //     }
-            //
-            //     return resolve(url);
-            // });
         });
     }
 

@@ -23,6 +23,12 @@ server.use(bodyParser.urlencoded({
 server.use(methodOverride());
 server.use(errorHandler());
 
+server.get('/api/top', (req, res) => {
+    Shorten.getTopHostnames()
+        .then(top => res.status(200).send({ top }))
+        .catch(error => res.status(500).send({ error }));
+});
+
 server.get('/api/shorten/:url', (req, res) => {
     Shorten.get({ shortenUrl: req.params.url })
         .then(shorten => res.status(200).send(shorten))
