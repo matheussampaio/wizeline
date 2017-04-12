@@ -23,6 +23,14 @@ server.use(bodyParser.urlencoded({
 server.use(methodOverride());
 server.use(errorHandler());
 
+
+function matchWithBackendUrl(url) {
+    const urls = ['top', 'urls', '404'];
+
+    return urls.indexOf(url) !== -1;
+}
+
+
 server.get('/api/top', (req, res) => {
     Shorten.getTopHostnames()
         .then(top => res.status(200).send({ top }))
@@ -54,7 +62,11 @@ server.post('/api/shorten', (req, res) => {
 });
 
 server.post('/api/custom', (req, res) => {
-    Shorten.verifyShortenUrl(req.body.custom)
+    if (matchWithBackendUrl(req.body.custom)) {
+        return res.status(406).send({ error: { status: 406, code: 'BACKEND_URL' } });
+    }
+
+    return Shorten.verifyShortenUrl(req.body.custom)
         .then(() => {
             if (req.body.deleteOld) {
                 return Shorten.delete({ shortenUrl: req.body.shortenUrl, token: req.body.token });

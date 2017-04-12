@@ -20,7 +20,9 @@ class ShortenController {
         this.errors = {
             INVALID_URL: 'ERROR: Invalid URL',
             CUSTOM_URL_TAKEN: 'ERRROR: Custom url taken',
-            INVALID_CHAR_PARAM: 'ERROR: Invalid char:'
+            INVALID_CHAR_PARAM: 'ERROR: Invalid char:',
+            BACKEND_URL: 'ERRROR: URL not available',
+            SAME_URL: 'You didn\'t change anything'
         };
     }
 

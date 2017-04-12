@@ -70,6 +70,7 @@ class UrlCardController {
 
     onSave(customUrl) {
         if (customUrl === this.url.shorten_url) {
+            this.shortenCtrl.showErrorToast({ code: 'SAME_URL' });
             return;
         }
 
