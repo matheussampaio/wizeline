@@ -30,7 +30,7 @@ class ShortenController {
         this.ShortenService.shortenUrl(this.url)
             .then((data) => {
                 this.data = data.shorten;
-                this.data.fullUrl = this.ShortenService.absUrl + this.data.shorten_url;
+                this.data.fullUrl = this.ShortenService.$location.absUrl() + this.data.shorten_url;
 
                 this.url = this.data.fullUrl;
 

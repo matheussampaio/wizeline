@@ -6,8 +6,8 @@ class ShortenService {
         }
 
         this.$log = $log;
+        this.$location = $location;
 
-        this.absUrl = $location.absUrl();
         this.resource = ShortenResource.get();
     }
 

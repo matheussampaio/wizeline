@@ -88,7 +88,7 @@ class UrlCardController {
 
                 const shorten = data.shorten;
 
-                shorten.fullUrl = this.ShortenService.absUrl + shorten.shorten_url;
+                shorten.fullUrl = this.ShortenService.$location.absUrl() + shorten.shorten_url;
 
                 this.StorageService.update(this.url.shorten_url, shorten);
             })
